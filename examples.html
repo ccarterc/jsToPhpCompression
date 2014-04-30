@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+</head>
+<body>
+
+<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script>
+/*
+	@author: colby callahan
+*/
+
+//This examples ajax request requires an endpoint.  I have included a php file which will respond to the ajax request.
+//Currently there is a known bug on the php side which occurs when data is too simple and you attempt to decompress.  Go figure.
+
+$(document).ready(doThing);
+
+/*TEST CASE 4 Maxed at X, if we do loop of X it fails*/
+
+function doThing(){
+    var myData = {
+        text:'truck car bird blue', 
+        someOtherText: 'roger dodger candlebox trucker',
+        andYetStillMore: 'High Five Madness Is taking Over',
+        yodaSays: 'this is freakin insane in the membrane',
+        simonSays: 'this is pissing me off, why does it break with simplicity',
+        cyclometricComplexity: 'prevents The Breakage, So I jUSt beTTer MakE it More Complex To Test the Size Savings of StuPid TexT'
+    },
+    myArr = [],
+    i,
+    stringed,   
+    compressed,
+    decompressed,
+    dataToSend;
+    
+
+    for(i = 0; i < 1000; i += 1){
+        myArr.push(myData);
+    }
+    //console.log('original array of objects');
+    //console.log(myArr);
+
+    stringed = JSON.stringify(myArr);
+    //console.log('stringified array');
+    //console.log(stringed);
+    console.log('uncompressed stringified length ' + stringed.length);
+
+    compressed = LZW.compress(stringed);
+    console.log('compressed stringified array');
+    console.log(compressed);
+    console.log('compressed stringified length ' + compressed.length);
+
+    decompressed = LZW.decompress(compressed);
+    //console.log('decompressed stringified array');
+    //console.log(decompressed);
+
+    dataToSend = compressed.join(',');
+
+    var readyData = {
+        test: dataToSend
+    };
+
+    //console.log(readyData.test.join(','));
+
+    $.ajax({
+        url: 'exampleEndPoint.php',
+        data: readyData,
+        type: 'POST',
+        //dataType: 'text',
+        success: function(a){
+            console.log('raw response');
+            console.log(a);
+            console.log('json parsed response');
+            console.log(JSON.parse(a));
+        }
+    });
+}
+
+/*END TEST CASE 4*/
+
+/*TEST CASE 1 Maxed at 465, if we do loop of 466 it fails*/
+/*
+function doThing(){
+    var myData = {text:'truck car bird blue'},
+    myArr = [],
+    i,
+    stringed,   
+    compressed,
+    decompressed,
+    dataToSend;
+    
+
+    for(i = 0; i < 465; i += 1){
+        myArr.push(myData);
+    }
+    console.log('original array of objects');
+    console.log(myArr);
+
+    stringed = JSON.stringify(myArr);
+    console.log('stringified array');
+    console.log(stringed);
+
+    compressed = LZW.compress(stringed);
+    console.log('compressed stringified array');
+    console.log(compressed);
+
+    decompressed = LZW.decompress(compressed);
+    console.log('decompressed stringified array');
+    console.log(decompressed);
+
+    dataToSend = compressed.join(',');
+
+    var readyData = {
+        test: dataToSend
+    };
+
+    //console.log(readyData.test.join(','));
+
+    $.ajax({
+        url: 'end.php',
+        data: readyData,
+        type: 'POST',
+        //dataType: 'text',
+        success: function(a){
+            console.log('raw response');
+            console.log(a);
+            console.log('json parsed response');
+            console.log(JSON.parse(a));
+        }
+    });
+}
+*/
+/*END TEST CASE 1*/
+
+/*TEST CASE 2 Maxed at 3082, if we do loop of 3082 it fails*/
+/*
+function doThing(){
+    var myData = {text:'truck car bird blue', someOtherText: 'roger dodger candlebox trucker'},
+    myArr = [],
+    i,
+    stringed,   
+    compressed,
+    decompressed,
+    dataToSend;
+    
+
+    for(i = 0; i < 3082; i += 1){
+        myArr.push(myData);
+    }
+    console.log('original array of objects');
+    console.log(myArr);
+
+    stringed = JSON.stringify(myArr);
+    console.log('stringified array');
+    console.log(stringed);
+
+    compressed = LZW.compress(stringed);
+    console.log('compressed stringified array');
+    console.log(compressed);
+
+    decompressed = LZW.decompress(compressed);
+    console.log('decompressed stringified array');
+    console.log(decompressed);
+
+    dataToSend = compressed.join(',');
+
+    var readyData = {
+        test: dataToSend
+    };
+
+    //console.log(readyData.test.join(','));
+
+    $.ajax({
+        url: 'end.php',
+        data: readyData,
+        type: 'POST',
+        //dataType: 'text',
+        success: function(a){
+            console.log('raw response');
+            console.log(a);
+            console.log('json parsed response');
+            console.log(JSON.parse(a));
+        }
+    });
+}
+*/
+/*END TEST CASE 2*/
+
+/*TEST CASE 3 Maxed at 8683, if we do loop of 8684 it fails*/
+/*
+function doThing(){
+    var myData = {
+        text:'truck car bird blue', 
+        someOtherText: 'roger dodger candlebox trucker',
+        andYetStillMore: 'High Five Madness Is taking Over'
+    },
+    myArr = [],
+    i,
+    stringed,   
+    compressed,
+    decompressed,
+    dataToSend;
+    
+
+    for(i = 0; i < 8683; i += 1){
+        myArr.push(myData);
+    }
+    //console.log('original array of objects');
+    //console.log(myArr);
+
+    stringed = JSON.stringify(myArr);
+    //console.log('stringified array');
+    //console.log(stringed);
+
+    compressed = LZW.compress(stringed);
+    //console.log('compressed stringified array');
+    console.log(compressed);
+
+    decompressed = LZW.decompress(compressed);
+    //console.log('decompressed stringified array');
+    //console.log(decompressed);
+
+    dataToSend = compressed.join(',');
+
+    var readyData = {
+        test: dataToSend
+    };
+
+    //console.log(readyData.test.join(','));
+
+    $.ajax({
+        url: 'end.php',
+        data: readyData,
+        type: 'POST',
+        //dataType: 'text',
+        success: function(a){
+            //console.log('raw response');
+            //console.log(a);
+            console.log('json parsed response');
+            console.log(JSON.parse(a));
+        }
+    });
+}
+*/
+/*END TEST CASE 3*/
+
+</script>
+</body>
+</html>
